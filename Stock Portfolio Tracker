@@ -1,0 +1,51 @@
+def run_stock_tracker():
+    stock_prices = {
+        "AAPL": 180.0,
+        "TSLA": 250.0,
+        "GOOGL": 140.0,
+        "MSFT": 390.0,
+        "AMZN": 170.0
+    }
+    
+    portfolio = {}
+    print("--- Stock Portfolio Tracker ---")
+    
+    while True:
+        stock_name = input("\nEnter the stock ticker (or type 'done' to finish): ").upper()
+        if stock_name == 'DONE':
+            break
+            
+        if stock_name not in stock_prices:
+            print("Stock not found in our system. Try again.")
+            continue
+            
+        try:
+            quantity = float(input(f"Enter the quantity of {stock_name} shares: "))
+            if quantity < 0:
+                print("Quantity cannot be negative.")
+                continue
+            portfolio[stock_name] = portfolio.get(stock_name, 0) + quantity
+        except ValueError:
+            print("Invalid input. Enter a numerical value.")
+            
+    total_investment = 0.0
+    summary_text = "--- Your Portfolio Summary ---\n"
+    
+    for stock, qty in portfolio.items():
+        price = stock_prices[stock]
+        value = qty * price
+        total_investment += value
+        summary_text += f"Stock: {stock} | Quantity: {qty} | Price: ${price} | Total Value: ${value}\n"
+        
+    summary_text += f"\nGrand Total Investment Value: ${total_investment}\n"
+    print(f"\n{summary_text}")
+    
+    if portfolio:
+        save_choice = input("Would you like to save this summary to a text file? (y/n): ").lower()
+        if save_choice == 'y':
+            with open("portfolio_summary.txt", "w") as file:
+                file.write(summary_text)
+            print("Portfolio saved to 'portfolio_summary.txt'.")
+
+if __name__ == "__main__":
+    run_stock_tracker()
